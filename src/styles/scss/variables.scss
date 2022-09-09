@@ -1,0 +1,52 @@
+$desktop-width: 1280px;
+$tablet-width: 834px;
+
+
+@mixin fn-title {
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 60px;
+}
+
+@mixin fn-sub-title {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+@mixin fn-text {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0.75px;
+}
+
+@mixin fn-text-small {
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0.75px;
+}
+
+@mixin media-desktop {
+  @media screen and (min-width: #{$media-desktop}) {
+    @content;
+  }
+}
+
+@mixin media-tablet-only {
+  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin media-tablet {
+  @media (min-width: #{$tablet-width}) {
+    @content;
+  }
+}
+
+@mixin media-custom($size) {
+  @media (min-width: #{$size}) {
+    @content;
+  }
+}
