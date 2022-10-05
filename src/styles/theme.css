@@ -10,7 +10,8 @@
   --light-grey: #D6D8E7;
   --dark-grey: #B9BAC4;
   --white: #FFFFFF;
-
+  --success: #00966D;
+  --error: #C30052;
   --fn-primary: 'Poppins', sans-serif;
 }
 
