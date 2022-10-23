@@ -8,7 +8,7 @@ import { getThemeValue } from "@/utils/getThemValue";
 const props = defineProps<{
   label: string;
   type?: InputHTMLAttributes["type"];
-  modelValue?: string;
+  modelValue?: string | null;
   placeHolder?: string;
   helpTextSuccess?: string;
   helpTextDefault?: string;

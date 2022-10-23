@@ -8,8 +8,6 @@ import CommonHeader from './components/Header/CommonHeader.vue'
   <header>
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/profile">Profile</RouterLink>

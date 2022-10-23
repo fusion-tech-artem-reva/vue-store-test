@@ -1,3 +1,3 @@
 export interface AuthenticationResponse<D> {
-  data: D & {token: string}
+  data: D & {token: string };
 }

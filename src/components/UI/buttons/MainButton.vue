@@ -1,33 +1,41 @@
-<script setup lang='ts'>
+<script setup lang="ts">
+import type { ButtonHTMLAttributes } from "@vue/runtime-dom";
+
 const props = defineProps<{
   btnTitle: string;
-  type: 'primary' | 'secondary';
+  btnType?: ButtonHTMLAttributes["type"];
+  type: "primary" | "secondary";
   isLoading?: boolean;
   className?: string;
   disabled?: boolean;
 }>();
 
-const { onClick } = defineEmits<{
-  onClick: () => void;
-}>()
-const mainClassName = `common-button__${props.type ?? 'primary'}`
+defineEmits<{
+  (e: 'onClick'):void;
+}>();
+
+const mainClassName = `common-button__${props.type ?? "primary"}`;
 </script>
 
 <template>
-  <button @click="onClick" :class="[
-  'common-button',
-  mainClassName,
-  {[`${mainClassName}--disabled`]: true},
-  className]">
-  
+  <button
+    @click="$emit('onClick')"
+    :type="btnType"
+    :class="[
+      'common-button',
+      mainClassName,
+      { [`${mainClassName}--disabled`]: disabled },
+      className,
+    ]"
+  >
     <span class="common-button__title" v-if="!isLoading">
-      {{btnTitle}}
+      {{ btnTitle }}
     </span>
     <div class="spiner" v-else></div>
   </button>
 </template>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .common-button {
   display: flex;
   justify-content: center;
@@ -35,14 +43,14 @@ const mainClassName = `common-button__${props.type ?? 'primary'}`
   padding: 10px 50px;
   width: 100%;
   border-radius: 16px;
+  width: max-content;
 
   &__primary {
     background-color: var(--dark-blue);
     color: var(--white);
 
-
     &:hover {
-      background-color: var(--dark)
+      background-color: var(--dark);
     }
 
     &--disabled {
@@ -53,7 +61,6 @@ const mainClassName = `common-button__${props.type ?? 'primary'}`
       }
     }
   }
-
 
   &__secondary {
     background-color: var(--white);
@@ -71,7 +78,7 @@ const mainClassName = `common-button__${props.type ?? 'primary'}`
   width: 16px;
   border-width: 3px;
   border-style: solid;
-  animation: spinerAnimation .6s infinite linear backwards;
+  animation: spinerAnimation 0.6s infinite linear backwards;
   border-right-color: transparent;
 }
 
@@ -89,11 +96,11 @@ const mainClassName = `common-button__${props.type ?? 'primary'}`
 
 @keyframes spinerAnimation {
   0% {
-    transform: rotate(0deg)
+    transform: rotate(0deg);
   }
 
   100% {
-    transform: rotate(360deg)
+    transform: rotate(360deg);
   }
 }
 </style>

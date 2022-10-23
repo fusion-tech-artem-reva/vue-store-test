@@ -1,6 +1,28 @@
+import { useUserStore } from '@/stores/user'
 import AuthenticationViewVue from '@/views/AuthenticationView.vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type NavigationGuardWithThis } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import EmptyView from '@/components/EmptyView.vue';
+import { tokenHelper } from '@/utils/localStorageHelper';
+
+const authenticationGuard: NavigationGuardWithThis<unknown> = (to) => {
+  const userStore = useUserStore();
+  if (!userStore.user?.email) {
+    return {
+      name: 'auth',
+      query: { redirectTo: to.fullPath }
+    }
+  }
+}
+
+const guardForRoutesWithoutAuth:NavigationGuardWithThis<unknown> = () => {
+  const userStore = useUserStore();
+  if (userStore.user?.email) {
+    return {
+      name: 'home'
+    }
+  }
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,11 +36,26 @@ const router = createRouter({
       path: '/auth',
       name: 'auth',
       component: AuthenticationViewVue,
+      beforeEnter: [guardForRoutesWithoutAuth]
     },
     {
       path: '/profile',
       name: 'profile',
-      component: () => import('../views/ProfileView.vue')
+      component: () => import('../views/ProfileView.vue'),
+      beforeEnter: [authenticationGuard]
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: EmptyView,
+      beforeEnter: (to, from) => {
+        const user = useUserStore();
+        user.setUser(null);
+        tokenHelper.remove();
+        return {
+          path: from.fullPath
+        }
+      }
     }
   ]
 })
