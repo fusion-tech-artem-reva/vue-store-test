@@ -64,7 +64,6 @@ router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
   if (!userStore.user && tokenHelper.get()) {
     await userStore.loginByToken();
-    return next()
   } 
   next()
 })

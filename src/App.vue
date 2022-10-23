@@ -8,15 +8,6 @@ const userStore = useUserStore();
 <template>
   <template v-if="userStore.isInitialised">
     <CommonHeader />
-    <header>
-      <div class="wrapper">
-        <nav>
-          <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/profile">Profile</RouterLink>
-          <RouterLink to="/auth">LogIn/SignUp</RouterLink>
-        </nav>
-      </div>
-    </header>
     <RouterView />
   </template>
   <h1 v-else>Loading...</h1>

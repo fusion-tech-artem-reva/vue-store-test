@@ -35,6 +35,12 @@ $tablet-width: 834px;
   letter-spacing: 0.75px;
 }
 
+
+@mixin layout {
+  max-width: $desktop-width;
+  margin: 0 auto;
+}
+
 @mixin media-desktop {
   @media screen and (min-width: #{$media-desktop}) {
     @content;
