@@ -4,24 +4,30 @@ import { useUserStore } from "@/stores/user";
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as Yup from "yup";
+import { useToast } from "vue-toastification";
+import { AxiosError } from "axios";
 
 import TextInput from "../UI/form/inputs/TextInput.vue";
 import MainButton from "../UI/buttons/MainButton.vue";
 import EmailIcon from "../UI/icons/EmailIcon.vue";
-import { getThemeValue } from "@/utils/getThemValue";
 import PasswordIcon from "../UI/icons/PasswordIcon.vue";
+
+import { getThemeValue } from "@/utils/getThemValue";
 import { authenticationScheme } from "@/utils/validationSchemes/authenticationScheme";
-import { useToast } from "vue-toastification";
-import { AxiosError } from "axios";
 import { useFormErrorsWatcher } from "./useFormErrorsWatcher";
+import type { AuthPageTypes } from '@/types/common.model';
+import { computed } from '@vue/reactivity';
+
+const props = defineProps<{
+  pageType: AuthPageTypes;
+}>();
+
 
 const formValues = ref<AuthRequiredFields>({
   email: null,
   password: null,
   confirmedPassword: null,
 });
-
-const pageType = ref<"signIn" | "signUp">("signIn");
 
 const formErrors = useFormErrorsWatcher({ formValues });
 
@@ -39,7 +45,7 @@ const onSubmit = async (ev: Event) => {
 
     await userStore.authenticateUser({
       ...formValues.value,
-      type: pageType.value,
+      type: props.pageType,
     });
 
     const pathTo = route.query.redirectTo || "/profile";
@@ -47,6 +53,7 @@ const onSubmit = async (ev: Event) => {
 
     router.push({ path: pathTo });
   } catch (err) {
+    console.log('err', err)
     if (err instanceof Yup.ValidationError) {
       err.inner.forEach((error) => {
         if (error.path && error.path in formErrors.value) {
@@ -61,17 +68,14 @@ const onSubmit = async (ev: Event) => {
   }
 };
 
-const switchPageType = (type: typeof pageType.value) => {
-  pageType.value = type;
-};
+const buttonTitle = computed(() => {
+  return props.pageType === 'signIn' ? 'Sign In' : 'Sign Up';
+});
+
 </script>
 
 <template>
-  <div>
-    <p>Sign Up</p>
-    <p>Sign In</p>
-  </div>
-  <form @submit="onSubmit" class="auth-form">
+  <form @submit="onSubmit">
     <TextInput
       help-text-default="Type your email"
       help-text-error="Incorrect email"
@@ -117,7 +121,7 @@ const switchPageType = (type: typeof pageType.value) => {
         />
       </template>
     </TextInput>
-    <MainButton type="primary" btnType="submit" btnTitle="Sign Up" />
+    <MainButton type="primary" btnType="submit" :btnTitle="buttonTitle" />
   </form>
 </template>
 

@@ -15,7 +15,7 @@ const authenticationGuard: NavigationGuardWithThis<unknown> = (to) => {
   }
 }
 
-const guardForRoutesWithoutAuth:NavigationGuardWithThis<unknown> = () => {
+const guardForRoutesWithoutAuth: NavigationGuardWithThis<unknown> = () => {
   const userStore = useUserStore();
   if (userStore.user?.email) {
     return {
@@ -53,11 +53,20 @@ const router = createRouter({
         user.setUser(null);
         tokenHelper.remove();
         return {
-          path: from.fullPath
+          name: 'auth'
         }
       }
     }
   ]
+})
+
+router.beforeEach(async (to, from, next) => {
+  const userStore = useUserStore();
+  if (!userStore.user && tokenHelper.get()) {
+    await userStore.loginByToken();
+    return next()
+  } 
+  next()
 })
 
 export default router
