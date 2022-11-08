@@ -48,7 +48,7 @@ const onSubmit = async (ev: Event) => {
       type: props.pageType,
     });
 
-    const pathTo = route.query.redirectTo || "/profile";
+    const pathTo = route.query.redirectTo || "/";
     if (typeof pathTo !== "string") return;
 
     router.push({ path: pathTo });

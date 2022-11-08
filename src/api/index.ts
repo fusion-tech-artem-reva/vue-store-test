@@ -19,7 +19,7 @@ instance.interceptors.request.use((configs) => {
 })
 
 instance.interceptors.response.use((response) => {
-  if (response.data.data.token) {
+  if (response.data?.data?.token) {
     tokenHelper.set(response.data.data.token)
   }
   return response

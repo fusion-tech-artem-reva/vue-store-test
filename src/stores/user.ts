@@ -29,7 +29,6 @@ export const useUserStore = defineStore({
       try {
         if (!tokenHelper.get()) return;
         const response = await whoAmI();
-        console.log('response', response)
         this.setUser(response.data)
       } catch (err) {
         console.log('Token expired');
